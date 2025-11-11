@@ -1,0 +1,65 @@
+
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+	
+\renewcommand{\mod}{\text{ mod }}
+\newcommand{\qed}{$\blacksquare$}
+
+\title{Problem set 5}
+\date\today
+
+\begin{document}
+\maketitle
+\subsection*{Question 1:}
+	
+
+Let $a \le b$. Then, Euclid's GCD algorithm goes through the following steps:
+\begin{align*}
+gcd(a,b) &= gcd(a, b \mod a) \\
+gcd(a , b \mod a) &= gcd(b \mod a, a \mod (b \mod a))
+\end{align*}
+For bounding the range of $ a \mod (b \mod a)$, we can first bound the ranges of  $a\mod b$:\\
+\indent$ 0 \le a \mod b \le a-1$ \\
+
+\noindent Now, let us consider $a \mod x$ where $0 \le x \le a-1$.\\
+\indent If $x < a/2 $, then $a \mod x < a/2$ since $a \mod b < b$\\
+\indent If $x > a/2 $, then $a \mod x < a/2$ since $a - x < a/2$\\
+\indent If $x = a/2 $, then $a \mod x = a/2$\\
+
+\noindent The maximum value of $ a \mod (b \mod a)$ is $a/2$. Thus the gcd algorithm is $O(lg(n))$ since it reduces the space by half every 2 iterations.
+
+\subsection*{Question 2:}
+\begin{align*}	
+n | ab \implies kn &= ab  \implies a = kn/b\\
+a,n \ coprime \implies 1 &= xa + yn \\
+1 &= xkn/b + yn \\
+b &= xkn + byn\\
+b &= n(xk + by)\\
+\implies n | b
+\end{align*}
+
+\subsection*{Question 3:}
+
+For $n \ge 2$, let us assume that the smallest factor $k$ is not prime. Then, $k = m*n, m,n \ge 2$. This leads to a contradiction, since both $m$ and $n$ will be factors of $n$, and will be less than $k$.
+
+\noindent Prime factorization exists (proof by induction): 
+
+\noindent \textbf{Base case:} Prime factorization of 2 is ${2}$ \\
+\textbf{Hypothesis:} Assume that hypothesis holds for all $ i \le n $\\
+\textbf{Indutive step:}\\
+$n+1$ is either prime, or not. 
+If it is prime, the prime factorization is ${n+1}$.
+Otherwise, there must be a prime factor $p_1$, so the prime factorization $P(n+1)$ is $p_1 \bigcup P(n/p_1)$, since $n/p_1 \le n$, and it's prime factorization exists by the induction hypothesis.
+
+\subsection*{Question 5:}
+Let us suppose there were only $k$ primes. Consider the number $p_1...p_k + 1$\\
+This number:\\
+\indent is not divisible by $p_1$ because the remainder is 1 \\
+\indent is not divisible by $p_2$ because the remainder is 1 \\
+\indent ...\\
+\indent is not divisible by $p_k$ because the remainder is 1 \\
+
+\noindent Since this number is not divisible by any primes, it must be prime. Also, this number is not equal to any of $p1..p_k$ since it is larger than any of them. Sso we have found a prime number larger than $p_k$, whcih shows our initial assumption is wrong and there are infinite primes. \qed
+\end{document}
