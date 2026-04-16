@@ -104,10 +104,20 @@ def visualize_colored_graph(matrix):
 np.random.seed(42)
 
 result = True
+cliques = 0
+non = 0
+
 while result:
     adj_matrix = generate_random_regular_graph()
     np.fill_diagonal(adj_matrix, 0) # No self-loops
     result, nodes = detect_4_cliques(adj_matrix)
     if not result:
-        print("no cliques found for ", adj_matrix)
-        visualize_colored_graph(adj_matrix)
+        # print("no cliques found for ", adj_matrix)
+        # visualize_colored_graph(adj_matrix)
+        non += 1
+    else:
+        cliques += 1
+    if ((cliques + non) % 10) == 0:
+        print(cliques, non , non/(non+cliques))
+
+    result = True # keep going        
