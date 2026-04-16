@@ -1,6 +1,9 @@
 import itertools
 import numpy as np
 import random
+import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
 
 def generate_random_regular_graph(n=17, red_degree=8):
     """
@@ -59,6 +62,43 @@ def detect_4_cliques(matrix):
             
     return False, None
 
+
+def visualize_colored_graph(matrix):
+    n = len(matrix)
+    G = nx.Graph()
+    
+    # Add nodes
+    G.add_nodes_from(range(n))
+    
+    # Define edge lists based on matrix values
+    red_edges = []
+    blue_edges = []
+    
+    for i in range(n):
+        for j in range(i + 1, n):  # Undirected: only check upper triangle
+            if matrix[i][j] == 0:
+                red_edges.append((i, j))
+            else:
+                blue_edges.append((i, j))
+    
+    # Position nodes in a circle for clarity with 17 nodes
+    pos = nx.circular_layout(G)
+    
+    plt.figure(figsize=(10, 10))
+    
+    # Draw nodes
+    nx.draw_networkx_nodes(G, pos, node_size=500, node_color='lightgrey')
+    nx.draw_networkx_labels(G, pos, font_size=10, font_family='sans-serif')
+    
+    # Draw edges with specific colors
+    nx.draw_networkx_edges(G, pos, edgelist=red_edges, edge_color='red', width=1.5, alpha=0.7)
+    nx.draw_networkx_edges(G, pos, edgelist=blue_edges, edge_color='blue', width=1.5, alpha=0.7)
+    
+    plt.title(f"Complete Graph ($K_{{{n}}}$) with Matrix-Defined Edge Colors")
+    plt.axis('off')
+    plt.show()
+
+
 # Example Usage:
 # Create a dummy 17x17 matrix (0 or 1)
 np.random.seed(42)
@@ -70,3 +110,4 @@ while result:
     result, nodes = detect_4_cliques(adj_matrix)
     if not result:
         print("no cliques found for ", adj_matrix)
+        visualize_colored_graph(adj_matrix)
