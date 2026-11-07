@@ -1,0 +1,81 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{Shannon (1948): capacity of a discrete noiseless channel}
+\author{Notes from Carlos' lessons}
+\date{}
+\begin{document}
+\maketitle
+
+\textbf{Source lesson:} \lesson{2026-08-14-shannons-paper-1.png}{2026-08-14 (Shannon's paper, part 1)}.
+See also \texttt{\textasciitilde/repos/books/entropy.pdf} (the paper), Part~I, Section~1, ``The discrete noiseless channel''.
+
+\section*{Setting and definition}
+
+A channel transmits sequences of symbols $S_1,\dots,S_n$ with durations $t_1,\dots,t_n$ (for example telegraph dots, dashes and spaces). Let $N(T)$ be the number of distinct allowed signals of duration $T$.
+
+\begin{definition}[Capacity (board, with units)]
+\[
+C=\lim_{T\to\infty}\frac{\log N(T)}{T}.
+\]
+\end{definition}
+With $\log_2$ the unit is \textbf{bits} (for example, if there are $32$ messages then $\log_232=5$ bits), and $C$ is measured in bits per second (the board's ``bits/second'').
+
+\section*{Case 1: free choice of symbols}
+
+\paragraph{Recurrence.} Condition on the last symbol: a signal of duration $T$ ends with some $S_i$ (duration $t_i$), preceded by an arbitrary signal of duration $T-t_i$:
+\[
+N(T)=N(T-t_1)+N(T-t_2)+\dots+N(T-t_n).
+\]
+This is a linear recurrence with constant coefficients, so its solutions are combinations $c_1\lambda_1^T+\dots+c_n\lambda_n^T$ where the $\lambda_i$ are roots of the characteristic equation. For large $T$ the term with the largest real root $\lambda_0$ dominates: $N(T)=\Theta(\lambda_0^T)$ (the board's ``$\Theta(\lambda^t)$'').
+
+Substituting $N(T)=\lambda^T$ into the recurrence and dividing by $\lambda^T$ gives
+\[
+1=\lambda^{-t_1}+\dots+\lambda^{-t_n}.
+\]
+So $\lambda_0$ is the largest real root of this equation, and
+\[
+C=\lim\frac{\log N(T)}T=\log\lambda_0.
+\]
+
+\begin{example}[Shannon's telegraph example]
+Four symbols: dot $=2$, dash $=4$, letter space $=3$, word space $=6$ time units, with two spaces never adjacent. The effective ``symbols'' are dot, dash, dot+letter space, dash+letter space, dot+word space, dash+word space, of durations $2,4,5,7,8,10$. The equation is
+\[
+\lambda^{-2}+\lambda^{-4}+\lambda^{-5}+\lambda^{-7}+\lambda^{-8}+\lambda^{-10}=1,
+\]
+with largest root $\lambda_0\approx1.4529$, so $C=\log_2\lambda_0\approx0.539$ bits per time unit (computed locally).
+\end{example}
+
+\section*{Case 2: a finite-state channel (the DFA on the board)}
+
+Now only some symbol sequences are allowed. Model this as a finite automaton with states $1,\dots,p$. In state $i$ the allowed symbols are indexed by $s$; the $s$-th one takes duration $b_{ij}^{(s)}$ and leads to state $j$. (On the board: the DFA with two states and the durations $b_{12}^{(1)},b_{12}^{(2)},\dots$.)
+
+Let $N_j(T)$ be the number of signals of duration $T$ that \textbf{end in state $j$}. Conditioning on the last transition,
+\[
+N_j(T)=\sum_{i=1}^p\sum_sN_i\bigl(T-b_{ij}^{(s)}\bigr),\qquad j=1,\dots,p,
+\]
+and $N(T)=N_1(T)+\dots+N_p(T)$.
+
+\paragraph{Ansatz.} For large $T$, $N_j(T)\sim k_j\lambda^T$ with the \emph{same} growth rate $\lambda$ for every $j$ (the board: ``$\lambda$ independent of $j$''). Substituting and dividing by $\lambda^T$,
+\[
+k_j=\sum_i\sum_sk_i\lambda^{-b_{ij}^{(s)}},\qquad j=1,\dots,p.
+\]
+In matrix form, with $M(\lambda)_{ij}=\sum_s\lambda^{-b_{ij}^{(s)}}$ (the board's $\bigl[\sum_s\lambda^{-b^{(s)}_{ij}}\bigr]_{i,j}$), this reads $\vec k=M(\lambda)^{\mathsf T}\vec k$, i.e.\ $\bigl(M(\lambda)^{\mathsf T}-I_p\bigr)\vec k=\vec0$. A \textbf{non-trivial} solution $\vec k\ne0$ exists iff the matrix is \textbf{not invertible} (the board's remark: $M\vec v=\vec0$ has a non-trivial solution iff $M$ is not invertible), that is,
+\[
+\det\Bigl(\Bigl[\sum_s\lambda^{-b_{ij}^{(s)}}\Bigr]_{ij}-I_p\Bigr)=0
+\]
+(transposing does not change the determinant). The growth rate $\lambda_0$ is the \textbf{largest real root} of this determinant equation, and then $N(T)=\Theta(\lambda_0^T)$, so
+\[
+\boxed{C=\log\lambda_0}.
+\]
+
+This is Shannon's Theorem~1: \emph{``the channel capacity $C$ is $\log W$, where $W$ is the largest real root of the determinant equation $\bigl|\sum_sW^{-b_{ij}^{(s)}}-\delta_{ij}\bigr|=0$''} ($\delta_{ij}$ is the Kronecker delta, i.e.\ $I_p$). Case~1 is the special case of a single state.
+
+\section*{Notes and gaps}
+\begin{itemize}
+  \item \textbf{What is not proved on the board:} that $N_j(T)\sim k_j\lambda^T$ at all, and that the dominant root is real and the right one. The rigorous argument is Perron--Frobenius for the non-negative matrix $M(\lambda)$ (for an irreducible channel). The board, like Shannon, uses the ansatz.
+  \item Shannon's own treatment is in Part~I, Section~1 of the paper. Confirmed by search: he defines $C=\lim_{T\to\infty}\frac{\log N(T)}T$, derives $N(T)=N(T-t_1)+\dots+N(T-t_n)$, and states that for large $T$ the count is dominated by $X_0^T$, where $X_0$ is the largest real root of $X^{-t_1}+\dots+X^{-t_n}=1$, giving $C=\log X_0$.
+  \item Sources: \href{https://www.uvm.edu/~cvincen1/files/teaching/spring2018-math382/shannon.pdf}{Shannon 1948 (UVM copy)}, \href{https://www.cs.yale.edu/homes/yry/readings/general/shannon1948.pdf}{Yale copy}, \href{https://vvkahpm.github.io/notes/Information\%20Theory/Reading_Shannon_1948/}{reading notes}.
+  \item The top of the board ($L_1][L_2$, with $2^{L_1+L_2}$ crossed out) is a scratch comparison of concatenated messages: lengths add under concatenation but the \emph{count} of messages multiplies, which is why one takes $\log N$ to get something additive ($\log_2$ of a product is the sum of the logs).
+\end{itemize}
+
+\end{document}

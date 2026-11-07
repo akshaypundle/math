@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{Group theory basics: orders, homomorphisms, isomorphism invariants}
+\author{Notes from Carlos' lessons}
+\date{}
+\begin{document}
+\maketitle
+
+\textbf{Source lesson:} \lesson{2026-01-28-classification-of-groups.png}{2026-01-28 (classification of groups)}.
+
+\section*{Definitions (from the board)}
+
+A group $(G,\cdot)$ is associative, has an identity $e$ ($ge=eg=g$), and every element has an inverse ($g^{-1}g=gg^{-1}=e$). It is not necessarily commutative ($ab\ne ba$ may happen).
+\begin{itemize}[nosep]
+  \item \textbf{Order of the group} $|G|$: the number of elements.
+  \item \textbf{Order of an element} $\ord(g)$: the least $k\ge1$ with $g^k=e$, or $\infty$ if no such $k$ exists.
+  \item Small examples on the board: $\Z_1,\dots,\Z_4$ under $+$, with element orders $(1)$, $(1,2)$, $(1,3,3)$, $(1,4,2,4)$; and $(\R,+)$, where every non-zero element has order $\infty$.
+\end{itemize}
+
+\section*{Cancellation (the ``sudoku property'')}
+
+\begin{claim}
+$gh=gk\Rightarrow h=k$, and likewise on the right. So every row and column of the multiplication table of a finite group contains each element exactly once.
+\end{claim}
+\begin{proof}
+Multiply on the left by $g^{-1}$.
+\end{proof}
+
+\section*{Every element of a finite group has finite order}
+
+\begin{theorem}
+If $G$ is finite, every $g\in G$ has $\ord(g)\le|G|$.
+\end{theorem}
+\begin{proof}
+Consider $g^1,g^2,\dots,g^{|G|+1}$: that is $|G|+1$ elements of a set of size $|G|$, so by pigeonhole $g^i=g^j$ for some $1\le i<j\le|G|+1$. Cancelling $g^i$ gives $g^{j-i}=e$ with $1\le j-i\le|G|$.
+\end{proof}
+(The board restricts to $g^1,\dots,g^{|G|}$ and excludes the identity to reach the same conclusion; the version above is the cleanest.)
+
+\section*{Cyclic behaviour}
+
+For a fixed $g$ the powers $g^n$ either exhaust $G$ or they do not.
+\begin{itemize}[nosep]
+  \item \textbf{Finite $G$, powers exhaust $G$:} $g^n\leftrightarrow n$ matches $G$ with $(\Z_{|G|},+)$.
+  \item \textbf{Infinite $G$, powers exhaust $G$:} $g^n\leftrightarrow n$ matches $G$ with $(\Z,+)$ (the board lists $\dots,g^{-2},g^{-1},g^0,g^1,g^2,\dots$).
+\end{itemize}
+The matching is a group isomorphism in the sense below, because $g^ig^j=g^{i+j}$.
+
+\section*{Homomorphisms}
+
+A \textbf{homomorphism} $\varphi:(G,\cdot)\to(H,*)$ is a map with $\varphi(ab)=\varphi(a)*\varphi(b)$ (it ``preserves structure''; ``relabelling'' on the board).
+
+\begin{claim}[Consequences]
+\begin{enumerate}[nosep]
+  \item $\varphi(e_G)=e_H$.
+  \item $\varphi(g^{-1})=\varphi(g)^{-1}$.
+\end{enumerate}
+\end{claim}
+\begin{proof}
+(1) $\varphi(e_G)=\varphi(e_Ge_G)=\varphi(e_G)\varphi(e_G)$; cancel $\varphi(e_G)$ in $H$.
+(2) $\varphi(g)\varphi(g^{-1})=\varphi(gg^{-1})=\varphi(e_G)=e_H$.
+\end{proof}
+
+An \textbf{isomorphism} is a homomorphism with an inverse homomorphism ($\varphi^{-1}\circ\varphi=\mathrm{id}_G$); equivalently, a bijective homomorphism.
+
+\section*{Invariants: orders}
+
+\begin{claim}
+If $\varphi:G\to H$ is an isomorphism, then $g$ and $\varphi(g)$ have the same order.
+\end{claim}
+\begin{proof}
+$g^k=e_G\iff\varphi(g^k)=e_H\iff\varphi(g)^k=e_H$. The first ``$\Leftarrow$'' uses injectivity (only $e_G$ maps to $e_H$); the second equivalence is the homomorphism property.
+\end{proof}
+
+\textbf{Consequence (the lesson's strategy for classifying groups).} For a group $G$, compute the multiset $S(G)$ of the orders of its elements. Isomorphic groups have the same $S(G)$, so different multisets prove that two groups are \emph{not} isomorphic. For instance $S(\Z_3)=\{1,3,3\}\ne S(\Z_4)=\{1,4,2,4\}$.
+
+\section*{Notes}
+\begin{itemize}[nosep]
+  \item The board is a definitions-and-first-lemmas lesson; the pigeonhole proof and the order invariant are the only real proofs, and both are given above.
+  \item The board only claims that element orders are \emph{an} invariant under isomorphism; it does not claim that $S(G)$ determines the group.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,64 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\newcommand{\id}{\mathrm{id}}
+\title{Category theory: definition and first examples}
+\author{Notes from Carlos' lessons}
+\date{}
+\begin{document}
+\maketitle
+
+\textbf{Source lesson:} \lesson{2026-07-22-category-theory.png}{2026-07-22 (category theory)}.
+
+\medskip
+This lesson is a definitions-and-examples board; there are no long proofs. Below are the definitions and, for each example, the small verification that it really is a category.
+
+\section*{Definition}
+
+\begin{definition}
+A \textbf{category} consists of
+\begin{enumerate}[nosep]
+  \item a collection of \textbf{objects} ($A,B,C,\dots$);
+  \item a collection of \textbf{morphisms (arrows)} $f:A\to B$ between objects;
+  \item for every object $X$ an \textbf{identity} arrow $\id_X:X\to X$;
+  \item \textbf{composition}: for $f:A\to B$ and $g:B\to C$ an arrow $g\circ f:A\to C$;
+  \item laws: $f\circ\id_A=f$, $\ \id_B\circ f=f$, and composition is associative, $h\circ(g\circ f)=(h\circ g)\circ f$.
+\end{enumerate}
+\end{definition}
+
+(The board's picture: $f:A\to B$, $g:B\to C$, $g\circ f:A\to C$, loops $\id_A$ and $\id_B$; and the check $f(\id_A(t))=f(t)$ for functions.)
+
+\section*{Examples from the board}
+
+\begin{enumerate}
+  \item \textbf{Set.} Objects: sets. Arrows: functions. Identity: $x\mapsto x$. Composition of functions is associative and has the identity laws, as checked pointwise.
+
+  \item \textbf{Poset (or preorder) category.} Take a partially ordered set; objects are its elements, and there is \emph{exactly one} arrow $a\to b$ iff $a\le b$. Identities exist by reflexivity ($a\le a$); composition $(b\le c)\circ(a\le b)=(a\le c)$ exists by transitivity; the laws hold automatically since there is at most one arrow between any two objects. Example drawn: $\cdots\to-2\to-1\to0\to1\to2\to3\to\cdots$ with identity loops ($1\le3$ is the composite $1\to2\to3$).
+  \begin{itemize}[nosep]
+    \item A \emph{partial order} requires antisymmetry ($a\le b$ and $b\le a$ imply $a=b$).
+    \item A \emph{preorder} requires only reflexivity and transitivity. The board's example is \textbf{divisibility}: $n\mid n$, and $a\mid b,\ b\mid c\Rightarrow a\mid c$. On the positive integers it is a partial order; on $\Z$ it is only a preorder, since $a\mid -a$ and $-a\mid a$ with $a\ne-a$ (``perhaps $a=-b$''). The drawn diagram of $\mathrm{Div}$: $1\to2\to4\to\cdots$ and $1\to3\to\cdots$.
+  \end{itemize}
+
+  \item \textbf{Grp.} Objects: groups. Arrows: group homomorphisms $\varphi:G\to H$ with $\varphi(ab)=\varphi(a)\varphi(b)$ (hence $\varphi(e_G)=e_H$ and $\varphi(g^{-1})=\varphi(g)^{-1}$; see the topic \emph{Group theory basics}). The composite of homomorphisms is a homomorphism, so this is a category. Example: $\Z\xrightarrow{\ \bmod n\ }\Z_n$ is a homomorphism because $(a+b)\bmod n=(a\bmod n)+(b\bmod n)$ in $\Z_n$.
+
+  \item \textbf{Hask} (programming languages with a nice type system, such as Haskell or Scala). Objects: types. Arrows: programs (functions) between types. Example: \texttt{add : $\Z\times\Z\to\Z$}. The board notes that the category is \textbf{Cartesian closed}: the type of functions $\Z\times\Z\to\Z$ is itself an object, equivalent to $\Z\to(\Z\to\Z)$ (currying).
+
+  \item \textbf{Board games.} A category for each board game (chess, tic-tac-toe). The board only names it (``board game $\to$'') without defining the arrows, and I leave it undefined too.
+
+  \item \textbf{Graphs.} Two constructions:
+  \begin{itemize}[nosep]
+    \item $\mathrm{Path}(G)$ for a directed graph $G$: objects are vertices, arrows $V\to W$ are \emph{paths} from $V$ to $W$; composition is concatenation of paths, and the identity is the empty path.
+    \item \textbf{Grph:} objects are graphs, arrows are graph homomorphisms (maps $f$ with $f(u)\sim f(v)\iff u\sim v$, as written on the board).
+  \end{itemize}
+
+  \item \textbf{Top.} Objects: topological spaces (sets with a notion of ``open set''); arrows: continuous functions.
+
+  \item \textbf{Vect$_\R$.} Objects: real vector spaces; arrows: linear maps (for example $\R^n\to\R$).
+\end{enumerate}
+
+\section*{Notes}
+\begin{itemize}[nosep]
+  \item The theme of the lesson: the \emph{same} abstract definition covers sets, orders, groups, programs, graphs, spaces and vector spaces. A poset is a category with at most one arrow between any two objects; this is the sense in which ``arrows generalize $\le$''.
+  \item At the top left of the board a stray ``$x\in y$'' is written; it is unrelated to the definitions below it.
+\end{itemize}
+
+\end{document}

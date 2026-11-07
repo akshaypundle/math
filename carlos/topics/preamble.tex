@@ -1,0 +1,40 @@
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage[colorlinks=true,bookmarks=false,linkcolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\iv}[1]{[#1]}                 % Iverson bracket
+\newcommand{\powerset}{\mathcal{P}}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\gcdop}{gcd}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+\newcommand{\lesson}[2]{\href{../lessons/#1}{#2}}   % link to a lesson image
+
+% Let long inline lists like \{1,2,5,6\} break across lines after a comma.
+\mathchardef\mycomma="613B
+\mathcode`,="8000
+{\catcode`,=\active \gdef,{\mycomma\penalty0\hspace{0pt}}}
+\emergencystretch=2em

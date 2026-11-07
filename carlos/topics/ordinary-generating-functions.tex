@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\newcommand{\coef}[2]{[x^{#1}]\,#2}
+\title{Ordinary generating functions:\\ formal power series, recurrences, Fibonacci, Catalan}
+\author{Notes from Carlos' lessons}
+\date{}
+\begin{document}
+\maketitle
+
+\textbf{Source lessons:}
+\lesson{2026-05-09-generating-function-1.png}{05-09},
+\lesson{2026-05-21-generating-function-fibonacci.png}{05-21 (Fibonacci)},
+\lesson{2026-05-27-generating-function-catalan.png}{05-27 (Catalan)},
+\lesson{2026-06-06-generating-function-catalan-cont.png}{06-06 (Catalan, cont.)},
+and the recurrence example on the left of \lesson{2026-06-13-exponential-generating-functions.png}{06-13}.
+
+\section{Formal power series (05-09, 05-21)}
+
+Goals (05-09): find closed forms for recurrences; even without a closed form, read off asymptotics. Convergence is a nuisance, so treat a power series \textbf{formally}: an infinite sequence $(a_n)_{n\ge0}=(a_0,a_1,\dots)$ written $\sum a_nx^n$.
+
+\begin{itemize}[nosep]
+  \item Sum: $(a_n)+(b_n)=(a_n+b_n)$. Product (convolution): $(a_n)(b_n)=\bigl(\sum_{k=0}^na_kb_{n-k}\bigr)_n=(a_0b_0,\ a_1b_0+a_0b_1,\ \dots)$. Identities: $0=(0,0,\dots)$ and $1=(1,0,0,\dots)$. The series $x^n$ is $(0,\dots,0,1,0,\dots)$ with the $1$ in position $n$; the constant $k$ is $(k,0,0,\dots)$. These form the ring $\R[[x]]$. Sequences that are eventually $0$ behave like polynomials.
+  \item Combinatorial reading: if $A$ counts structures ``a'' of size $n$ and $B$ counts structures ``b'' of size $n$, then $A+B$ counts ``a or b'' and $AB$ counts pairs $(a,b)$ with total size $n$.
+\end{itemize}
+
+\paragraph{Geometric series.} $(1-x)(1+x+x^2+\cdots)=(1,-1,0,\dots)(1,1,1,\dots)=(1,0,0,\dots)=1$. So $1+x+x^2+\dots=\dfrac1{1-x}$ (meaning: it is the inverse of $1-x$ in the ring). Replacing $x\to tx$: $\dfrac1{1-tx}=(1,t,t^2,\dots)$.
+
+\paragraph{Inverses.}
+\begin{claim}
+$(a_n)$ has a multiplicative inverse iff $a_0\ne0$; the inverse is then unique.
+\end{claim}
+\begin{proof}
+We want $b$ with $\sum_{k\le n}a_kb_{n-k}=\iv{n=0}$. For $n=0$: $a_0b_0=1$, which needs $a_0\ne0$ (and $b_0=1/a_0$). For $n\ge1$: $b_n=-\frac1{a_0}\sum_{k=1}^na_kb_{n-k}$ is forced, so $b$ exists and is unique. Conversely, if $a_0=0$ then every product has $0$-th term $0\ne1$.
+\end{proof}
+Hence $1/x$ is \emph{not} defined ($x=(0,1,0,\dots)$ has $a_0=0$), as the board notes.
+
+\section{Solving a recurrence: $a_0=1,\ a_{n+1}=2a_n+n$}
+
+(Left of the 06-13 board.) Let $A(x)=\sum a_nx^n$. Multiply the recurrence by $x^{n+1}$ and sum over $n\ge0$:
+\[
+A(x)-1=2xA(x)+\sum_{n\ge0}nx^{n+1}=2xA(x)+\frac{x^2}{(1-x)^2},
+\]
+using $\sum nx^n=\frac{x}{(1-x)^2}$ (the sequence $(0,1,2,\dots)$ on the board). So $A(x)=\dfrac1{1-2x}+\dfrac{x^2}{(1-2x)(1-x)^2}$. Partial fractions give
+\[
+A(x)=\frac2{1-2x}-\frac1{1-x}-\frac x{(1-x)^2},
+\]
+and reading off coefficients,
+\[
+a_n=2^{n+1}-1-n.
+\]
+Check: $a=1,2,5,12,\dots$ and the formula gives $1,2,5,12$. (The board's final line is $2^{n+1}-n-1$.)
+
+The 05-27 board does a simpler version: $\dfrac1{(1-x)(1-2x)}=\dfrac{-1}{1-x}+\dfrac2{1-2x}$ (solving $A+B=1$, $-2A-B=0$ gives $A=-1$, $B=2$), so the coefficients are $2^{n+1}-1$. That is the solution of $T_n=2T_{n-1}+1$ with $T_0=1$ (I could not tell whether the board's $T_0$ was $0$ or $1$).
+
+\section{Fibonacci (05-21)}
+
+$F_0=0$, $F_1=1$, $F_{n+1}=F_n+F_{n-1}$; let $f=(F_0,F_1,\dots)$. The board's key observation: multiplying by $x^n$ shifts the sequence right by $n$ places.
+\begin{align*}
+f&=(0,1,1,2,\dots),\quad xf=(0,0,1,1,\dots),\quad x^2f=(0,0,0,1,\dots),\\
+&\Rightarrow\ (x+x^2)f=(0,0,F_2,F_3,\dots)=f-x,
+\end{align*}
+because $F_{n+1}=F_n+F_{n-1}$ makes $(x+x^2)f$ agree with $f$ from index $2$ onward, while $f$ has $F_0=0$, $F_1=1$ at the front. Hence $x=(1-x-x^2)f$ and
+\[
+\boxed{f=\frac{x}{1-x-x^2}}.
+\]
+
+\paragraph{Closed form.} $1-x-x^2=(1-\varphi x)(1-\psi x)$ with $\varphi=\frac{1+\sqrt5}2$ and $\psi=\frac{1-\sqrt5}2$ (so $\varphi+\psi=1$ and $\varphi\psi=-1$; these are $-1/r_{1,2}$ for the roots $r_{1,2}=\frac{-1\mp\sqrt5}2$ of $1-x-x^2$, as the board writes with $r_1=-\varphi$, $r_2=-\varphi^{-1}$). Partial fractions:
+\[
+\frac x{(1-\varphi x)(1-\psi x)}=\frac1{\sqrt5}\Bigl(\frac1{1-\varphi x}-\frac1{1-\psi x}\Bigr),
+\]
+and $\frac1{1-tx}=(1,t,t^2,\dots)$ (the board's ``final step''), so
+\[
+\boxed{F_n=\frac{\varphi^n-\psi^n}{\sqrt5}}.
+\]
+(The board does the partial fractions in the form $\frac{1}{(x-r_1)(x-r_2)}=\frac{A}{x-r_1}+\frac B{x-r_2}$ with $A=-\frac1{\sqrt5}$, $B=\frac1{\sqrt5}$, and rewrites $\frac1{x-t}=-\frac1t\cdot\frac1{1-x/t}$.) Verified numerically for $n<20$.
+
+\section{Catalan numbers (05-27, 06-06)}
+
+\paragraph{Recurrence.} $C_0=1$ and $C_{n+1}=\sum_{k=0}^nC_kC_{n-k}$ for $n\ge0$. Let $C(x)=\sum C_nx^n$ and write $\coef nA$ for the $n$-th coefficient. Coefficient rules from the board: $\coef n{(A+B)}=\coef nA+\coef nB$; $\coef n{(AB)}=\sum_{k=0}^n\coef kA\cdot\coef{n-k}B$; and $\coef n{(xP)}=\coef{n-1}P$.
+
+\paragraph{Functional equation.} For $n\ge0$: $\coef{n+1}C=\sum_kC_kC_{n-k}=\coef n{C^2}=\coef{n+1}{(xC^2)}$, and $\coef0C=1$. Therefore
+\[
+C(x)=1+x\,C(x)^2,\qquad\text{i.e.}\qquad xC^2-C+1=0.
+\]
+
+\paragraph{Solving.} The quadratic formula (in the region where the series converges) gives $C(x)=\dfrac{1\pm\sqrt{1-4x}}{2x}$. Which sign? Since $C(0)=C_0=1$, i.e.\ $\lim_{x\to0}C(x)=1$ (the continuity remark on the 06-06 board: ``$C(x)$ must converge to a continuous function wherever it converges''):
+\begin{itemize}[nosep]
+  \item ``$+$'': $\dfrac{1+\sqrt{1-4x}}{2x}\to\pm\infty$ as $x\to0^+$. Rejected.
+  \item ``$-$'': $\dfrac{1-\sqrt{1-4x}}{2x}=\dfrac{4x}{2x\,(1+\sqrt{1-4x})}\to1$. Accepted.
+\end{itemize}
+So $C(x)=\dfrac{1-\sqrt{1-4x}}{2x}$.
+
+\paragraph{Coefficients via the binomial series.} For any real $r$, $(1+x)^r=\sum_{k\ge0}\binom rkx^k$ with $\binom rk=\dfrac{r(r-1)\cdots(r-k+1)}{k!}$. (The board motivates this as: for $n\in\N$ it is the usual binomial theorem, and the falling-factorial form makes sense for $r=\tfrac12$, ``a power series for $\sqrt{1+x}$''.) Then
+\[
+\sqrt{1-4x}=\sum_{k\ge0}\binom{1/2}k(-4x)^k,\qquad
+C(x)=-\frac1{2x}\sum_{k\ge1}\binom{1/2}k(-4)^kx^k=\sum_{k\ge0}2\binom{1/2}{k+1}(-4)^kx^k,
+\]
+the boxed expression on the board. Simplifying (my step; the board stops here) gives $C_n=\dfrac1{n+1}\binom{2n}n$. For example $n=1$: $2\binom{1/2}2(-4)=2\cdot(-\tfrac18)(-4)=1$; and $n=2$: $2\cdot\tfrac1{16}\cdot16=2$. Numerically $1,1,2,5,14,42,132,429,\dots$.
+
+\paragraph{Convergence remarks (06-06).} The series $\sum C_nx^n$ cannot converge for $x>\tfrac14$ because $\sqrt{1-4x}$ is non-real there; the radius of convergence is $\tfrac14$. The board also writes out $C(\tfrac14)=C_0+\tfrac14C_1+\tfrac1{16}C_2+\dots>1$ while probing the boundary of the region. (Independently, $C_n\sim4^n/(\sqrt\pi\,n^{3/2})$ confirms the radius $\tfrac14$.) The trailing ``$\sum 1/n^2=\,?$'' at the bottom of the board leads into the next lesson, the topic \emph{Euler, the Basel sum and coprime probability}.
+
+\section*{Notes}
+\begin{itemize}[nosep]
+  \item The 06-06 board is the continuation of the 05-27 board (the explicit and implicit forms $C=\frac{1-\sqrt{1-4x}}{2x}$, $C^2-C+1=0$ in its top-right corner). I dated it June 6 because it ends on the Basel question that opens the June 7 lesson; the original filename read ``june-67''.
+  \item Binary trees with $B=x+xB^2$ (counted by Catalan numbers) appear in the topic \emph{Exponential generating functions and labelled structures}.
+\end{itemize}
+
+\end{document}

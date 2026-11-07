@@ -1,0 +1,73 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{Set partitions (Bell numbers) and involutions}
+\author{Notes from Carlos' lessons}
+\date{}
+\begin{document}
+\maketitle
+
+\textbf{Source lessons:}
+\lesson{2026-07-01-partitions-of-a-set.png}{07-01 (partitions of a set)},
+\lesson{2026-07-14-number-of-partitions.png}{07-14 (number of partitions)},
+\lesson{2026-07-14-number-of-involutions.png}{07-14 (number of involutions)}.
+
+\medskip
+Both results use the EGF toolkit from the topic \emph{Exponential generating functions}: the EGF of a product counts labelled pairs, $e^x$ is ``sets'', and $e^{A(x)}$ is ``a set of $A$-structures''.
+
+\section{Set partitions: $\displaystyle\sum_n b_n\frac{x^n}{n!}=e^{e^x-1}$}
+
+$b_n$ is the number of partitions of $[n]=\{1,\dots,n\}$ into non-empty blocks (the Bell numbers). Small cases from the 07-01 board: $b_1=1$ ($\{1\}$); $b_2=2$ ($\{1,2\}$; $\{1\}\{2\}$); $b_3=5$ ($\{1,2,3\}$; $\{1,2\}\{3\}$; $\{1\}\{2,3\}$; $\{1,3\}\{2\}$; $\{1\}\{2\}\{3\}$). (The board also draws the $3$-vertex graph with all edges and with none, anticipating the interpretation below.)
+
+\begin{theorem}
+$B(x)=\sum_{n\ge0}b_n\frac{x^n}{n!}=e^{e^x-1}$, with $b_0=1$.
+\end{theorem}
+\begin{proof}[Proof (07-14 board)]
+\begin{enumerate}[nosep]
+  \item A \textbf{set} structure has exactly one structure on every label set: its sequence is $(1,1,1,\dots)$, with EGF $\sum_{n\ge0}\frac{x^n}{n!}=e^x$. \textbf{Non-empty} sets exclude $n=0$: the EGF is $e^x-1$.
+  \item A partition into exactly $n$ blocks is $n$ non-empty sets with distinct label sets. $(e^x-1)^n$ counts them as an ordered $n$-tuple (the product rule, applied repeatedly). Since the label sets are disjoint and non-empty, the $n!$ orderings are all different, so $\dfrac{(e^x-1)^n}{n!}$ counts \textbf{unordered} collections of $n$ non-empty blocks (the board: ``$n$ nonempty sets (unordered)'').
+  \item Summing over the number of blocks,
+  \[
+  B(x)=\sum_{n\ge0}\frac{(e^x-1)^n}{n!}=e^{e^x-1}.
+  \]
+\end{enumerate}
+\end{proof}
+
+\paragraph{Equivalent graph picture (07-01).} $b_n$ is also the number of graphs on the vertex set $[n]$ whose connected components are cliques. The components of such a graph form a partition of $[n]$, and conversely a partition determines the graph. The board's triangle and three isolated vertices are the two extreme cases for $n=3$.
+
+\subsection*{Consequences (derived from the theorem)}
+\begin{itemize}
+  \item \textbf{Recurrence.} $B'(x)=e^xB(x)$ (chain rule), so comparing $[x^n]$ with the EGF product rule gives $b_{n+1}=\sum_{k=0}^n\binom nkb_k$. (Combinatorially: the block containing element $n+1$ has $n-k$ other elements, chosen in $\binom n{n-k}$ ways, and the other $k$ elements are partitioned freely.) This gives $1,1,2,5,15,52,203,877,\dots$.
+  \item \textbf{Dobi\'nski's formula.} $e^{e^x-1}=e^{-1}\sum_{k\ge0}\frac{e^{kx}}{k!}$, and $[x^n/n!]\,e^{kx}=k^n$, so $b_n=\frac1e\sum_{k\ge0}\frac{k^n}{k!}$. This is probably what the $\sum\frac{k^n}{k!}$ scribbles on the 07-01 board are reaching for. The board writes $b_n=\sum_{k=1}^n\frac{k^n}{k!}$, which is not correct as written: it is missing the factor $1/e$, and the sum should run to $\infty$; for $n=2$ it gives $1+\frac42=3\ne2$.
+  \item \textbf{The recurrence attempt on the board.} The board also tries $b_n=b_{n-1}+\sum_kk\,b(n-1,k)$, where $b(n,k)$ is the number of partitions of $[n]$ into $k$ blocks: element $n$ is either a new singleton block ($b_{n-1}$ ways) or joins one of the $k$ blocks of a partition of $[n-1]$ with $k$ blocks ($k\,b(n-1,k)$ ways). That recurrence is correct. The next line on the board, ``$b_n=b_{n-1}+b_{n-1}$'' with a ``??'', looks like a stalled step: $\sum_kk\,b(n-1,k)$ is not equal to $b_{n-1}$ in general (for $n=3$: $b(2,1)\cdot1+b(2,2)\cdot2=3\ne b_2=2$), so that line should not be read as a valid identity.
+\end{itemize}
+
+\section{Involutions: $\displaystyle\sum_n i_n\frac{x^n}{n!}=e^{x+x^2/2}$}
+
+A \textbf{permutation} of $[n]$ is a bijection $\pi:[n]\to[n]$; an \textbf{involution} is a permutation with $\pi\circ\pi=\mathrm{id}$ (for example the swap $1\leftrightarrow2$ on $\{1,2\}$, or the identity). $i_n$ is the number of involutions of $[n]$.
+
+\paragraph{Structure.} Draw the functional graph $x\to\pi(x)$. If $\pi\circ\pi=\mathrm{id}$, then for each $x$ either $\pi(x)=x$ (a fixed point, a singleton), or $\pi(x)=y\ne x$ and $\pi(y)=\pi(\pi(x))=x$ (the pair $\{x,y\}$ is swapped). Conversely, any partition of $[n]$ into singletons and pairs defines an involution (fix the singletons, swap the pairs). So
+\[
+\text{involutions of }[n]\ \longleftrightarrow\ \text{sets of singletons and pairs partitioning }[n].
+\]
+
+\begin{theorem}
+$I(x)=\sum_{n\ge0}i_n\frac{x^n}{n!}=\exp\!\bigl(x+\tfrac{x^2}2\bigr)$.
+\end{theorem}
+\begin{proof}
+The block structure (``a single block, which is a singleton or a pair'') has exactly one structure on a label set of size $1$, one on a label set of size $2$, and none otherwise. Its EGF is $\frac{x}{1!}+\frac{x^2}{2!}=x+\frac{x^2}2$. An involution is a \emph{set} of such blocks, so by the $e^{A(x)}$ principle $I(x)=e^{x+x^2/2}$.
+\end{proof}
+
+\paragraph{Note on the board.} It circles $e^{x+x^2}$ and expands $\sum\frac{(x+x^2)^n}{n!}$; the pair term should be $\frac{x^2}{2!}$, since a pair $\{x,y\}$ is one unordered structure on $2$ labels. Check with $n=2$: $[x^2]\,e^{x+x^2/2}=\frac12+\frac12=1$, so $i_2=2!\cdot1=2$ (the identity and the swap). With $x^2$ in place of $\frac{x^2}2$ one would get $i_2=3$, which is wrong.
+
+\subsection*{Consequences (derived)}
+\begin{itemize}[nosep]
+  \item $I'(x)=(1+x)I(x)$, so $i_{n+1}=i_n+n\,i_{n-1}$ (element $n+1$ is fixed, or swapped with one of the $n$ others).
+  \item Explicit count (choose $k$ disjoint pairs): $i_n=\displaystyle\sum_{k=0}^{\lfloor n/2\rfloor}\frac{n!}{2^kk!(n-2k)!}$.
+  \item Values: $1,1,2,4,10,26,76,232,764,2620$ (checked with both formulas).
+\end{itemize}
+
+\section*{Related pattern}
+
+All three (sets, partitions, involutions) are instances of one picture: a structure on a label set has an EGF $A(x)$, and a \textbf{set} of such structures has EGF $e^{A(x)}$. Permutations as sets of cycles are the same with $A(x)=-\ln(1-x)$ (the cycle EGF has coefficients $\frac{(n-1)!\,x^n}{n!}$), giving $e^{-\ln(1-x)}=\frac1{1-x}$, i.e.\ $n!$ permutations. That is not on these boards, but it is a good sanity check of the principle.
+
+\end{document}

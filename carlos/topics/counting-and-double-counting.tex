@@ -1,0 +1,93 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{Counting and double counting}
+\author{Notes from Carlos' lessons}
+\date{}
+\begin{document}
+\maketitle
+
+\textbf{Source lessons:} \lesson{2026-02-11-proving-bijections.png}{2026-02-11 (proving bijections)};
+pigeonhole fragment at the left of \lesson{2026-02-27-ramsey-numbers.png}{2026-02-27 (Ramsey numbers)}.
+
+\section*{Iverson bracket}
+
+For a proposition $P$, $\iv{P}=1$ if $P$ is true and $0$ otherwise. Rules (check by truth table):
+\begin{enumerate}[nosep]
+  \item $\iv{P\wedge Q}=\iv{P}\iv{Q}$
+  \item $\iv{P\vee Q}=\iv{P}+\iv{Q}-\iv{P}\iv{Q}$
+  \item $\iv{\neg P}=1-\iv{P}$
+\end{enumerate}
+
+\emph{Cardinality as a sum:} for finite $X$ and $S\subseteq X$, $|S|=\sum_{x\in X}\iv{x\in S}$.
+Hence $n-|S|=\sum_{t\in[n]}\bigl(1-\iv{t\in S}\bigr)=\sum_{t\in[n]}\iv{t\notin S}$ (used below).
+
+The technique of the whole lesson: write a count as a double sum of brackets, swap the order of summation, and evaluate the other way.
+
+\section*{Handshake lemma}
+
+\begin{theorem}[Handshake lemma]
+For a finite undirected graph $G=(V,E)$ (edges are $2$-element subsets of $V$),
+$\displaystyle\sum_{v\in V}\deg(v)=2|E|$.
+\end{theorem}
+\begin{proof}
+$\deg(v)=|\{e\in E: v\in e\}|=\sum_{e\in E}\iv{v\in e}$. So
+\[
+\sum_{v}\deg(v)=\sum_{v}\sum_{e}\iv{v\in e}=\sum_{e}\sum_{v}\iv{v\in e}
+=\sum_{e}\bigl|\{v: v\in e\}\bigr|=\sum_{e}2=2|E|.
+\]
+The swap is legal because both sums are finite. The set being double counted is $\{(v,e)\in V\times E: v\in e\}$.
+\end{proof}
+
+\begin{corollary}
+The number of odd-degree vertices is even; in particular a graph on an odd number of vertices cannot have all degrees odd.
+\end{corollary}
+(This is used in the parity argument for $R(3,4)\le 9$.)
+
+\section*{$\sum_k\binom nk = 2^n$}
+
+\begin{theorem}
+$\displaystyle\sum_{k=0}^n\binom nk=2^n$.
+\end{theorem}
+\begin{proof}
+$\binom nk=|\{S\subseteq[n]:|S|=k\}|=\sum_{S\subseteq[n]}\iv{|S|=k}$. Sum over $k=0,\dots,n$ and swap:
+\[
+\sum_{k=0}^n\binom nk=\sum_{S\subseteq[n]}\sum_{k=0}^n\iv{|S|=k}=\sum_{S\subseteq[n]}1=|\powerset([n])|=2^n,
+\]
+since for each $S$ exactly one $k$ (namely $|S|$) makes the bracket equal to $1$.
+\end{proof}
+
+\section*{Binomial theorem}
+
+\begin{theorem}
+$(x+y)^n=\displaystyle\sum_{k=0}^n\binom nk x^ky^{n-k}$.
+\end{theorem}
+\begin{proof}
+Expand the product $\prod_{t=1}^n(x+y)$. Choosing $x$ or $y$ from each factor $t$ corresponds to choosing the set $S\subseteq[n]$ of factors that contribute $x$. So
+\[
+(x+y)^n=\sum_{S\subseteq[n]}\ \prod_{t\in[n]}x^{\iv{t\in S}}y^{\iv{t\notin S}}
+=\sum_{S\subseteq[n]}x^{|S|}y^{\,n-|S|}.
+\]
+Group the sets $S$ by size $k=|S|$; there are $\binom nk$ of each size.
+\end{proof}
+
+The board example: $n=3$, $S=\{1,3\}$ picks $x\cdot y\cdot x$.
+A second proof, via exponential generating functions, is in the topic \emph{Exponential generating functions}.
+
+\section*{Pigeonhole: a block of terms divisible by $N$}
+
+The left margin of the 02-27 board asks: given $a_1,\dots,a_N\in\N$, is there a nonempty $S$ with $N\mid\sum_{k\in S}a_k$? It lists the prefix sums $a_1,\ a_1+a_2,\ \dots,\ a_1+\dots+a_N$, which is the standard proof.
+
+\begin{claim}
+Some nonempty block of \emph{consecutive} terms has sum divisible by $N$.
+\end{claim}
+\begin{proof}
+Let $s_j\equiv a_1+\dots+a_j\pmod N$ for $j=1,\dots,N$. If some $s_j=0$, the block $a_1,\dots,a_j$ works. Otherwise the $N$ values lie in $\{1,\dots,N-1\}$, so two coincide, $s_i=s_j$ with $i<j$, and then $a_{i+1}+\dots+a_j\equiv0\pmod N$.
+\end{proof}
+
+\section*{Notes}
+\begin{itemize}[nosep]
+  \item The lesson's filename says ``bijections'', but what is on the board is the Iverson-bracket / double-counting toolkit; no explicit bijection is proved there.
+  \item The right-hand scrawl on the board (the $\prod x^{\iv{t\in S}}y^{\iv{t\notin S}}$ expansion and the $S=\{1,3\}$ example) is the binomial-theorem proof above.
+\end{itemize}
+
+\end{document}
