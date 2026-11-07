@@ -5,7 +5,7 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 
-def generate_random_regular_graph(n=17, red_degree=8):
+def generate_fayley_regular_graph(n=17, red_degree=8):
     """
     Generates a 17x17 adjacency matrix where every node has 
     exactly 8 red edges (1) and 8 blue edges (0).
@@ -32,6 +32,54 @@ def generate_random_regular_graph(n=17, red_degree=8):
     adj = adj[perm, :][:, perm]
     
     return adj
+
+import random
+import numpy as np
+
+def generate_random_8_regular_matrix(n=17, k=8):
+    """
+    Generates a 17x17 matrix representing a complete graph.
+    1 = Blue edge, 0 = Red edge.
+    Each node will have exactly 8 blue edges and 8 red edges.
+    """
+    # We continue trying until we successfully build a valid graph
+    while True:
+        matrix = np.zeros((n, n), dtype=int)
+        # 'stubs' represents the 8 'connection points' each node has for blue edges
+        stubs = list(range(n)) * k
+        random.shuffle(stubs)
+        
+        success = True
+        temp_stubs = stubs[:]
+        edges = []
+        
+        # Attempt to pair stubs to create edges
+        while temp_stubs:
+            if len(temp_stubs) < 2:
+                success = False
+                break
+            
+            u = temp_stubs.pop()
+            # Try to find a valid partner v for node u
+            found_v = False
+            for i in range(len(temp_stubs)):
+                v = temp_stubs[i]
+                # Conditions: No self-loops and no duplicate edges
+                if u != v and matrix[u, v] == 0:
+                    temp_stubs.pop(i)
+                    matrix[u, v] = 1
+                    matrix[v, u] = 1
+                    found_v = True
+                    break
+            
+            if not found_v:
+                success = False
+                break
+        
+        if success:
+            return matrix
+
+# Generate the matrix
 
 def detect_4_cliques(matrix):
     """
@@ -108,16 +156,16 @@ cliques = 0
 non = 0
 
 while result:
-    adj_matrix = generate_random_regular_graph()
+    adj_matrix = generate_random_8_regular_matrix()
     np.fill_diagonal(adj_matrix, 0) # No self-loops
     result, nodes = detect_4_cliques(adj_matrix)
     if not result:
-        # print("no cliques found for ", adj_matrix)
-        # visualize_colored_graph(adj_matrix)
+        print("no cliques found for ", adj_matrix)
         non += 1
     else:
+        # visualize_colored_graph(adj_matrix)
         cliques += 1
-    if ((cliques + non) % 10) == 0:
+    if ((cliques + non) % 10000) == 0:
         print(cliques, non , non/(non+cliques))
 
     result = True # keep going        
